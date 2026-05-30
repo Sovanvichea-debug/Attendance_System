@@ -7,7 +7,7 @@
                     <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path>
                 </svg>
             </div>
-            <h2 class="login-title">ប្រព័ន្ធគ្រប់គ្រងវត្តមាន</h2>
+            <h2 class="login-title">Attendance Tracker</h2>
             <p class="login-subtitle">សូមបញ្ចូលគណនីគ្រូបង្រៀនដើម្បីចូលទៅកាន់ប្រព័ន្ធ</p>
         </div>
 
