@@ -1,0 +1,14 @@
+.gemini/
+.idea/
+.vscode/
+*.log
+step17.json
+step17_utf8.json
+step188.json
+step188_real.json
+last_write.json
+end_prev.json
+
+# User Uploads
+assets/uploads/avatars/*
+!assets/uploads/avatars/.gitkeep
