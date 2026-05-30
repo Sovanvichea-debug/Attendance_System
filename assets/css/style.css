@@ -1169,44 +1169,7 @@ div#pre-loader {
     box-shadow: none;
 }
 
-/* Helper Box for Demo Credentials */
-.helper-box {
-    background: rgba(79, 70, 229, 0.05);
-    border: 1px dashed rgba(79, 70, 229, 0.25);
-    border-radius: 14px;
-    padding: 1rem 1.25rem;
-    transition: all 0.25s ease;
-}
 
-.helper-box:hover {
-    background: rgba(79, 70, 229, 0.08);
-    border-color: rgba(79, 70, 229, 0.4);
-}
-
-.helper-title {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #4f46e5;
-    display: flex;
-    align-items: center;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.helper-credentials {
-    font-size: 0.85rem;
-    color: #475569;
-    line-height: 1.6;
-}
-
-.helper-credentials strong {
-    font-weight: 600;
-    transition: color 0.2s ease;
-}
-
-.helper-credentials:hover strong {
-    color: #4338ca !important;
-}
 
 /* Profile Dropdown Styling in Navigation */
 .profile-dropdown-toggle::after {

@@ -49,39 +49,11 @@
                 <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
             </button>
         </form>
-
-        <div class="helper-box mt-4">
-            <div class="helper-title">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="me-1">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="16" x2="12" y2="12"></line>
-                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                </svg>
-                គណនីសាកល្បងលំនាំដើម (សាកល្បងចុចលើគណនីដើម្បីបំពេញ)៖
-            </div>
-            <div class="helper-credentials mt-2" id="demo-account" style="cursor: pointer;">
-                <div>Username: <strong class="text-primary text-decoration-underline" id="demo-username">teacher</strong></div>
-                <div>Password: <strong class="text-primary text-decoration-underline" id="demo-password">teacher123</strong></div>
-            </div>
-        </div>
     </div>
 </div>
 
 <script>
 $(document).ready(function() {
-    // Autofill demo account on click
-    $('#demo-account').click(function() {
-        $('#username').val($('#demo-username').text());
-        $('#password').val($('#demo-password').text());
-        $('#username').focus();
-        
-        // Add subtle animation scale effect to input
-        $('.input-wrapper-custom').addClass('glow-effect');
-        setTimeout(function() {
-            $('.input-wrapper-custom').removeClass('glow-effect');
-        }, 1000);
-    });
-
     // Toggle Password Visibility
     $('#toggle-password').click(function() {
         const passwordField = $('#password');
