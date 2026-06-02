@@ -56,7 +56,6 @@ class Actions {
         if(isset($_SESSION['user'])){
             unset($_SESSION['user']);
         }
-        $_SESSION['flashdata'] = ['type' => 'success', 'msg' => 'ចាកចេញពីប្រព័ន្ធដោយជោគជ័យ!'];
         return ['status' => 'success'];
     }
 
@@ -220,6 +219,39 @@ class Actions {
         return $students;
     }
 
+    public function get_student_attendance_stats($student_id){
+        if(empty($student_id)) return null;
+        
+        // Fetch student details
+        $student_id = addslashes($student_id);
+        $student_sql = "SELECT s.*, c.name as class_name FROM `students_tbl` s JOIN `class_tbl` c ON s.class_id = c.id WHERE s.id = '{$student_id}'";
+        $student_qry = $this->conn->query($student_sql);
+        if (!$student_qry || $student_qry->num_rows == 0) return null;
+        $student = $student_qry->fetch_assoc();
+        
+        // Fetch attendance stats counts
+        $stats_sql = "SELECT 
+                        COUNT(id) as total,
+                        SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as present,
+                        SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) as late,
+                        SUM(CASE WHEN status = 3 THEN 1 ELSE 0 END) as absent,
+                        SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END) as excused
+                      FROM `attendance_tbl` WHERE student_id = '{$student_id}'";
+        $stats_qry = $this->conn->query($stats_sql);
+        $counts = $stats_qry ? $stats_qry->fetch_assoc() : ['total' => 0, 'present' => 0, 'late' => 0, 'absent' => 0, 'excused' => 0];
+        
+        // Get list of all recorded dates
+        $history_sql = "SELECT class_date, status FROM `attendance_tbl` WHERE student_id = '{$student_id}' ORDER BY class_date DESC";
+        $history_qry = $this->conn->query($history_sql);
+        $history = $history_qry ? $history_qry->fetch_all(MYSQLI_ASSOC) : [];
+        
+        return [
+            'student' => $student,
+            'counts' => $counts,
+            'history' => $history
+        ];
+    }
+
     public function get_dashboard_stats(){
         $stats = [];
         
@@ -233,7 +265,7 @@ class Actions {
         $latest_date = ($date_qry && $date_qry->num_rows > 0) ? $date_qry->fetch_assoc()['max_date'] : null;
         $stats['latest_date'] = $latest_date;
         
-        $stats['attendance_breakdown'] = ['total' => 0, 'present' => 0, 'late' => 0, 'absent' => 0];
+        $stats['attendance_breakdown'] = ['total' => 0, 'present' => 0, 'late' => 0, 'absent' => 0, 'excused' => 0];
         if(!empty($latest_date)){
             $breakdown_qry = $this->conn->query("SELECT status, count(id) as count FROM `attendance_tbl` where class_date = '{$latest_date}' group by status");
             if($breakdown_qry){
@@ -247,6 +279,8 @@ class Actions {
                         $stats['attendance_breakdown']['late'] = $count;
                     } elseif ($status === 3) {
                         $stats['attendance_breakdown']['absent'] = $count;
+                    } elseif ($status === 4) {
+                        $stats['attendance_breakdown']['excused'] = $count;
                     }
                 }
             }
@@ -260,7 +294,7 @@ class Actions {
         $stats['class_list'] = $class_list;
         
         $recent_sessions = [];
-        $recent_query = $this->conn->query("SELECT a.`class_date`, c.`name` as `class_name`, c.`id` as `class_id`, COUNT(DISTINCT a.`student_id`) as `total_students`, SUM(CASE WHEN a.`status` = 1 THEN 1 ELSE 0 END) as `present_count`, SUM(CASE WHEN a.`status` = 2 THEN 1 ELSE 0 END) as `late_count`, SUM(CASE WHEN a.`status` = 3 THEN 1 ELSE 0 END) as `absent_count` FROM `attendance_tbl` a JOIN `students_tbl` s ON a.`student_id` = s.`id` JOIN `class_tbl` c ON s.`class_id` = c.`id` GROUP BY a.`class_date`, c.`id` ORDER BY a.`class_date` DESC, c.`name` ASC LIMIT 5");
+        $recent_query = $this->conn->query("SELECT a.`class_date`, c.`name` as `class_name`, c.`id` as `class_id`, COUNT(DISTINCT a.`student_id`) as `total_students`, SUM(CASE WHEN a.`status` = 1 THEN 1 ELSE 0 END) as `present_count`, SUM(CASE WHEN a.`status` = 2 THEN 1 ELSE 0 END) as `late_count`, SUM(CASE WHEN a.`status` = 3 THEN 1 ELSE 0 END) as `absent_count`, SUM(CASE WHEN a.`status` = 4 THEN 1 ELSE 0 END) as `excused_count` FROM `attendance_tbl` a JOIN `students_tbl` s ON a.`student_id` = s.`id` JOIN `class_tbl` c ON s.`class_id` = c.`id` GROUP BY a.`class_date`, c.`id` ORDER BY a.`class_date` DESC, c.`name` ASC LIMIT 5");
         if ($recent_query) {
             $recent_sessions = $recent_query->fetch_all(MYSQLI_ASSOC);
         }

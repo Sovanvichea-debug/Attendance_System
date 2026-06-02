@@ -169,6 +169,10 @@ if ($breakdown['total'] > 0) {
                                     <span class="legend-pill danger"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="8" height="8" fill="currentColor" class="me-1 d-inline-block align-middle"><circle cx="12" cy="12" r="10"></circle></svg> Absent</span>
                                     <strong class="text-dark"><?= $breakdown['absent'] ?></strong>
                                 </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="legend-pill info"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="8" height="8" fill="currentColor" class="me-1 d-inline-block align-middle"><circle cx="12" cy="12" r="10"></circle></svg> Excused</span>
+                                    <strong class="text-dark"><?= $breakdown['excused'] ?? 0 ?></strong>
+                                </div>
                                 <hr class="my-1">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="text-muted fw-bold">Total Marked</span>
@@ -220,7 +224,8 @@ if ($breakdown['total'] > 0) {
                                         <td class="text-center">
                                             <span class="badge bg-success-subtle text-success me-1 px-2 py-1 rounded fw-bold" title="Present"><?= $sess['present_count'] ?> Present</span>
                                             <span class="badge bg-warning-subtle text-warning me-1 px-2 py-1 rounded fw-bold" title="Late"><?= $sess['late_count'] ?> Late</span>
-                                            <span class="badge bg-danger-subtle text-danger px-2 py-1 rounded fw-bold" title="Absent"><?= $sess['absent_count'] ?> Absent</span>
+                                            <span class="badge bg-danger-subtle text-danger me-1 px-2 py-1 rounded fw-bold" title="Absent"><?= $sess['absent_count'] ?> Absent</span>
+                                            <span class="badge bg-info-subtle text-info px-2 py-1 rounded fw-bold" title="Excused"><?= $sess['excused_count'] ?? 0 ?> Excused</span>
                                         </td>
                                         <td class="text-center">
                                             <a href="./?page=attendance&class_id=<?= $sess['class_id'] ?>&class_date=<?= $sess['class_date'] ?>" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1" title="Edit/View">

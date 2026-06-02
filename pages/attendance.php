@@ -80,9 +80,10 @@ if (!function_exists('getInitials')) {
                         <table id="attendance-tbl" class="table table-hovered">
                             <colgroup>
                                 <col width="40%">
-                                <col width="20%">
-                                <col width="20%">
-                                <col width="20%">
+                                <col width="15%">
+                                <col width="15%">
+                                <col width="15%">
+                                <col width="15%">
                             </colgroup>
                             <thead>
                                 <tr>
@@ -90,6 +91,7 @@ if (!function_exists('getInitials')) {
                                     <th class="text-center">Present</th>
                                     <th class="text-center">Late</th>
                                     <th class="text-center">Absent</th>
+                                    <th class="text-center">Excused</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -119,6 +121,14 @@ if (!function_exists('getInitials')) {
                                             </label>
                                         </div>
                                     </td>
+                                    <td class="text-center">
+                                        <div class="checkall-badge-wrapper">
+                                            <label class="checkall-badge option-excused" for="ECheckAll" title="Mark All Excused">
+                                                <input class="checkAll" type="checkbox" id="ECheckAll">
+                                                <span>ALL</span>
+                                            </label>
+                                        </div>
+                                    </td>
                                 </tr>
                                 <?php if(!empty($studentList) && is_array($studentList)): ?>
                                 <?php foreach($studentList as $row): ?>
@@ -127,7 +137,7 @@ if (!function_exists('getInitials')) {
                                             <input type="hidden" name="student_id[]" value="<?= $row['id'] ?>">
                                             <div class="d-flex align-items-center">
                                                 <div class="student-avatar"><?= getInitials($row['name']) ?></div>
-                                                <span class="student-name-text"><?= $row['name'] ?></span>
+                                                <a href="javascript:void(0)" class="view_profile student-name-text text-dark text-decoration-none hover-primary-text" data-id="<?= $row['id'] ?>"><?= $row['name'] ?></a>
                                             </div>
                                         </td>
                                         <td class="text-center align-middle">
@@ -154,11 +164,19 @@ if (!function_exists('getInitials')) {
                                                 </label>
                                             </div>
                                         </td>
+                                        <td class="text-center align-middle">
+                                            <div class="attendance-options-group">
+                                                <label class="att-option option-excused" for="status_e_<?= $row['id'] ?>" title="Excused">
+                                                    <input class="status_check" data-id="<?= $row['id'] ?>" type="checkbox" name="status[]" value="4" id="status_e_<?= $row['id'] ?>" <?= (isset($row['status']) && $row['status'] == 4) ? "checked" : "" ?>>
+                                                    <span>E</span>
+                                                </label>
+                                            </div>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="4" class="py-4 text-center text-muted">
+                                        <td colspan="5" class="py-4 text-center text-muted">
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mb-2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
                                             <div>No students registered in this class.</div>
                                         </td>
@@ -234,6 +252,8 @@ if (!function_exists('getInitials')) {
                     $('.status_check[value="2"]').prop('checked', true) 
                 }else if(id == 'ACheckAll'){
                     $('.status_check[value="3"]').prop('checked', true) 
+                }else if(id == 'ECheckAll'){
+                    $('.status_check[value="4"]').prop('checked', true) 
                 }
             }else{
                 if(id == 'PCheckAll'){
@@ -242,6 +262,8 @@ if (!function_exists('getInitials')) {
                     $('.status_check[value="2"]').prop('checked', false) 
                 }else if(id == 'ACheckAll'){
                     $('.status_check[value="3"]').prop('checked', false) 
+                }else if(id == 'ECheckAll'){
+                    $('.status_check[value="4"]').prop('checked', false) 
                 }
             }
         })
@@ -254,7 +276,7 @@ if (!function_exists('getInitials')) {
             $('#attendance-tbl .student-row').each(function(){
                 var has_checks = $(this).find('.status_check:checked').length
                 if(has_checks < 1){
-                    var name = $(this).find('.student-name-text').text() || "";
+                    var name = $(this).find('.view_profile').text() || "";
                         name = String(name).trim();
                     alert(`${name}'s attendance is not yet marked!`);
                     end_loader()
@@ -291,10 +313,17 @@ if (!function_exists('getInitials')) {
                 }
             })
         })
+
+        // Student Profile Modal Trigger
+        $('.view_profile').click(function(e) {
+            e.preventDefault();
+            var id = $(this).attr('data-id');
+            open_modal('student_profile.php', 'ប្រវត្តិរូបសិស្ស / Student Profile', {id: id}, 'modal-lg');
+        });
     })
 
     function checkAll_count(){
-        var statuses = {'PCheckAll': 1, 'LCheckAll': 2, 'ACheckAll': 3}
+        var statuses = {'PCheckAll': 1, 'LCheckAll': 2, 'ACheckAll': 3, 'ECheckAll': 4}
         $('.checkAll').each(function(){
             var id = $(this).attr('id')
             var checkedCount = $(`.status_check[value="${statuses[id]}"]:checked`).length

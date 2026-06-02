@@ -93,7 +93,7 @@ function getInitials($name) {
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="student-avatar"><?= getInitials($row['name']) ?></div>
-                                            <span class="fw-semibold text-dark"><?= $row['name'] ?></span>
+                                            <a href="javascript:void(0)" class="view_profile fw-semibold text-dark text-decoration-none hover-primary-text" data-id="<?= $row['id'] ?>"><?= $row['name'] ?></a>
                                         </div>
                                     </td>
                                     <td class="text-center">
@@ -202,6 +202,11 @@ function getInitials($name) {
             e.preventDefault()
             var id = $(this)[0].dataset?.id || ''
             open_modal('student_form.php', 'Update Student Details', {id: id})
+        })
+        $('.view_profile').click(function(e){
+            e.preventDefault()
+            var id = $(this).attr('data-id')
+            open_modal('student_profile.php', 'ប្រវត្តិរូបសិស្ស / Student Profile', {id: id}, 'modal-lg')
         })
         $('.delete_student').click(function(e){
             e.preventDefault()

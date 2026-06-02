@@ -1441,3 +1441,126 @@ body.sidebar-open .app-content-push-wrapper {
         transform: none !important; /* Prevent displacement on desktop */
     }
 }
+
+/* Excused Status Options */
+.option-excused:hover {
+    border-color: var(--info);
+    color: var(--info);
+}
+.option-excused:has(input:checked) {
+    border-color: var(--info-border);
+    background: var(--info-light);
+}
+.option-excused:has(input:checked) span {
+    background: var(--info);
+    color: #ffffff;
+    font-weight: 800;
+    box-shadow: 0 2px 6px rgba(6, 182, 212, 0.2);
+}
+
+.status-cell-pill.e {
+    background-color: var(--info-light);
+    color: var(--info-text);
+}
+
+/* Hover effect on student names */
+.hover-primary-text {
+    cursor: pointer;
+    transition: color var(--transition-fast) ease;
+}
+.hover-primary-text:hover {
+    color: var(--primary) !important;
+    text-decoration: underline !important;
+}
+
+/* Student Profile Modal Styles */
+.profile-modal-avatar {
+    width: 64px;
+    height: 64px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 1.25rem;
+    border: 3px solid #ffffff;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.15);
+}
+
+.student-profile-info h4 {
+    margin: 0 0 0.25rem 0;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.student-profile-info p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.student-stat-card {
+    background: #ffffff;
+    border: 1px solid var(--border-darker);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.student-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow);
+}
+
+.student-stat-card.present { border-left: 4px solid var(--success); }
+.student-stat-card.late { border-left: 4px solid var(--warning); }
+.student-stat-card.absent { border-left: 4px solid var(--danger); }
+.student-stat-card.excused { border-left: 4px solid var(--info); }
+
+.student-stat-num {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+}
+
+.student-stat-num.present { color: var(--success); }
+.student-stat-num.late { color: var(--warning); }
+.student-stat-num.absent { color: var(--danger); }
+.student-stat-num.excused { color: var(--info); }
+
+.student-stat-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.student-stat-pct {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-body);
+}
+
+.history-table-container {
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid var(--border-darker);
+    border-radius: var(--radius-md);
+}
+
+.history-table-container table {
+    margin-bottom: 0 !important;
+}
+
+.history-table-container th {
+    position: sticky;
+    top: 0;
+    background: #f8fafc;
+    z-index: 10;
+}
