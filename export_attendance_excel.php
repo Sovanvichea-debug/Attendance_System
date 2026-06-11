@@ -23,7 +23,7 @@ if(!$classData){
 $className = $classData['name'];
 
 $studentList = $actionClass->attendanceStudentsMonthly($class_id, $class_month);
-$monthLastDay = date("t", strtotime("{$class_month}-01")) ;
+$recordedDates = $actionClass->getRecordedAttendanceDates($class_id, $class_month);
 $monthName = date("F Y", strtotime($class_month));
 
 // Clean output buffer
@@ -147,15 +147,15 @@ header("Expires: 0");
   <!-- Report Header -->
   <table>
     <tr>
-      <td colspan="<?= $monthLastDay + 5 ?>" class="title-header" style="border: none; text-align: left;">របាយការណ៍វត្តមានប្រចាំខែ / Monthly Attendance Report</td>
+      <td colspan="<?= count($recordedDates) + 5 ?>" class="title-header" style="border: none; text-align: left;">របាយការណ៍វត្តមានប្រចាំខែ / Monthly Attendance Report</td>
     </tr>
     <tr>
-      <td colspan="<?= $monthLastDay + 5 ?>" class="meta-header" style="border: none; text-align: left;">
+      <td colspan="<?= count($recordedDates) + 5 ?>" class="meta-header" style="border: none; text-align: left;">
         <strong>ថ្នាក់ / Class:</strong> <?= htmlspecialchars($className) ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <strong>ខែ / Month:</strong> <?= date("F Y", strtotime($class_month)) ?>
       </td>
     </tr>
-    <tr style="height: 15px;"><td colspan="<?= $monthLastDay + 5 ?>" style="border: none;"></td></tr>
+    <tr style="height: 15px;"><td colspan="<?= count($recordedDates) + 5 ?>" style="border: none;"></td></tr>
   </table>
 
   <!-- Report Table -->
@@ -163,9 +163,9 @@ header("Expires: 0");
     <thead>
       <tr>
         <th style="min-width: 200px; text-align: left;">សិស្ស / Students</th>
-        <?php for($i=1; $i <= $monthLastDay; $i++): ?>
-          <th><?= $i ?></th>
-        <?php endfor; ?>
+        <?php foreach($recordedDates as $date): ?>
+          <th><?= date('j', strtotime($date)) ?></th>
+        <?php endforeach; ?>
         <th class="summary-hdr">TP</th>
         <th class="summary-hdr">TL</th>
         <th class="summary-hdr">TA</th>
@@ -183,10 +183,9 @@ header("Expires: 0");
             $ta = 0;
             $te = 0;
             ?>
-            <?php for($i=1; $i <= $monthLastDay; $i++): ?>
+            <?php foreach($recordedDates as $date_val): ?>
               <?php 
-                $day_key = $class_month . "-" . str_pad($i, 2, "0", STR_PAD_LEFT);
-                $status = $row['attendance'][$day_key] ?? null;
+                $status = $row['attendance'][$date_val] ?? null;
                 switch($status){
                     case 1:
                         echo "<td class='status-p'>P</td>";
@@ -208,7 +207,7 @@ header("Expires: 0");
                         echo "<td class='status-none'>-</td>";
                 }
               ?>
-            <?php endfor; ?>
+            <?php endforeach; ?>
             <td class="summary-val"><?= $tp ?></td>
             <td class="summary-val"><?= $tl ?></td>
             <td class="summary-val"><?= $ta ?></td>
@@ -217,7 +216,7 @@ header("Expires: 0");
         <?php endforeach; ?>
       <?php else: ?>
         <tr>
-          <td colspan="<?= $monthLastDay + 5 ?>">No student records found.</td>
+          <td colspan="<?= count($recordedDates) + 5 ?>">No student records found.</td>
         </tr>
       <?php endif; ?>
     </tbody>

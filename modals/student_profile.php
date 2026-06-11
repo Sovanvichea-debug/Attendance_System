@@ -46,11 +46,31 @@ $excused_pct = $total > 0 ? round(($counts['excused'] / $total) * 100) : 0;
             <?= getInitials($student['name']) ?>
         </div>
         <div class="student-profile-info">
-            <h4 class="fw-bold text-dark mb-1"><?= htmlspecialchars($student['name']) ?></h4>
-            <p class="text-muted mb-0">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1 align-middle"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path></svg>
-                Class: <span class="fw-bold text-dark"><?= htmlspecialchars($student['class_name']) ?></span>
-            </p>
+            <h4 class="fw-bold text-dark mb-1">
+                <?= htmlspecialchars($student['name']) ?> 
+                <?php if(!empty($student['name_latin'])): ?>
+                    <span class="text-muted fw-normal fs-6"> (<?= htmlspecialchars($student['name_latin']) ?>)</span>
+                <?php endif; ?>
+            </h4>
+            <div class="d-flex flex-wrap gap-3 align-items-center mt-1 text-muted" style="font-size: 0.9rem;">
+                <div>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1 align-middle"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"></path></svg>
+                    Class: <span class="fw-bold text-dark"><?= htmlspecialchars($student['class_name']) ?></span>
+                </div>
+                <div>
+                    Gender: 
+                    <?php 
+                        $g = $student['gender'] ?? '';
+                        if ($g == 'Male') {
+                            echo "<span class='badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-0.5 rounded-pill'>ប្រុស (Male)</span>";
+                        } else if ($g == 'Female') {
+                            echo "<span class='badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-0.5 rounded-pill'>ស្រី (Female)</span>";
+                        } else {
+                            echo "<span class='text-muted'>-</span>";
+                        }
+                    ?>
+                </div>
+            </div>
         </div>
     </div>
 
